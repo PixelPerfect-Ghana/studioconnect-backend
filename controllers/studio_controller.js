@@ -1,7 +1,7 @@
-import { StudioModel } from "../models/studio_model";
+
+import express from 'express';
+import { StudioModel } from "../models/studio_model.js";
 const router = express.Router();
-
-
 
 
 export const addStudio = async (req, res, next) => {
@@ -52,7 +52,7 @@ export const countStudio = async (req, res, next) => {
 
 }
 
-export const getStudio = async (req, res, next) => {
+export const getStudioById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const Studio = await StudioModel.findById(id);
@@ -73,13 +73,13 @@ export const updateStudio = async (req, res, next) => {
     }
 }
 
-export const deleteStudio = async(req, res, next) => {
+export const deleteStudio = async (req, res, next) => {
     try {
-const {id} = req.params;
-const studio = await StudioModel.findByIdAndDelete(id);
+        const { id } = req.params;
+        const studio = await StudioModel.findByIdAndDelete(id);
         res.json('studio deleted');
     } catch (error) {
-        res.status(400).json({ messaage:error.message});
+        res.status(400).json({ messaage: error.message });
         next(error);
     }
 };

@@ -1,6 +1,6 @@
 // import jwt from "jsonwebtoken"
 import { expressjwt } from "express-jwt";
-import { UserModel } from "../models/user.js";
+import User from '../models/user_models.js';
 
 export const isAuthenticated = expressjwt({
     secret:process.env.JWT_PRIVATE_KEY,

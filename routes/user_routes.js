@@ -1,8 +1,9 @@
 import { Router } from "express";
 
-import { getProfile, loginUser, logoutUser, registerUser, updateProfile,countBusiness } from "../controllers/user.js";
+import { getProfile, loginUser, logoutUser, registerUser, updateProfile,} from "../controllers/user.js";
 
 import { userAvatarUpload } from "../middlewares/upload.js";
+
 import { isAuthenticated, hasPermission } from "../middlewares/auth.js";
 //create router
 const userRouter = Router();

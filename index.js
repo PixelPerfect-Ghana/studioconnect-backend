@@ -1,12 +1,12 @@
 
 import express from 'express';
 import mongoose from 'mongoose';
-import StudioRouter from './routes/studio_routes.js'
+import studioRouter from './routes/studio_routes.js'
 import userRouter from './routes/user_routes.js';
 
 
 //connect to database
-await mongoose .connect(process.env.MONGO_URI);
+await mongoose.connect(process.env.MONGO_URI);
 
 // create an express app
 const app = express();
@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 
 // use routes
-app.use(StudioRouter);
+app.use(studioRouter);
 app.use(userRouter);
 
  

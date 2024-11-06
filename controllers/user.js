@@ -1,10 +1,11 @@
 import { registerUserValidator,loginUserValidator,updateProfileValidator } from "../vallidator/user_validator";
-import {UserModel} from "../models/user_models.js";
+import User from "../models/user_models.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
-import {mailTransporter} from "../utils/mail.js";
+// import {mailTransporter} from "../utils/email.js";
 
 export const registerUser = async (req, res, next) => {
+
     try {
         // validate user imput
         const { error, value } = registerUserValidator.validate(req.body);
@@ -12,7 +13,7 @@ export const registerUser = async (req, res, next) => {
             return res.status(422).json(error);
         }
         //check if user does not exist
-        const user = await UserModel.findOne({ emaill: value.email });
+        const user = await User.findOne({ emaill: value.email });
         if (user) {
             return res.status(409).json('user already exist');
         }
@@ -45,7 +46,7 @@ export const loginUser = async (req, res, next) => {
             return res.status(422).json(error);
         }
         // find one user with identifier
-        const user = await UserModel.findOne({ email: value.email });
+        const user = await User.findOne({ email: value.email });
         if (!user) {
             return res.status(404).json('user does not exist');
         }
@@ -75,7 +76,7 @@ export const loginUser = async (req, res, next) => {
 export const getProfile = async (req, res, next) => {
     try {
         // find authenticated usedr from database
-        const user = await UserModel.findById(req.auth.id).select({ password: false });
+        const user = await User.findById(req.auth.id).select({ password: false });
         res.json(user);
     } catch (error) {
         next(error);

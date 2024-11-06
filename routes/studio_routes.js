@@ -1,27 +1,27 @@
 import { Router } from "express";
 
-import { addgetStudio, deletegetStudio, getStudio, updategetStudio, getgetStudio ,} from "../controllers/studio_controller.js";
+import { addStudio, deleteStudio, getStudios, updateStudio, getStudioById,} from "../controllers/studio_controller.js";
 
-import { getStudioIconUpload, userAvatarUpload } from "../middlewares/upload.js";
+import { studioIconUpload, userAvatarUpload } from "../middlewares/upload.js";
 
 // create a router 
-const StudioRouter = Router();
+const studioRouter = Router();
 
 
 //define routes
-StudioRouter.post('/studio', getStudioIconUpload.single('icon'), addgetStudio);
+studioRouter.post('/studio', studioIconUpload.single('icon'), addStudio);
 
-StudioRouter.get('/studio', getgetStudio);
+studioRouter.get('/studio', getStudios);
 
-StudioRouter.get('/studio/count');
+studioRouter.get('/studio/count');
 
-StudioRouter.get('/studio/:id',getStudio);
+studioRouter.get('/studio/:id',getStudioById);
 
-StudioRouter.patch('/studio/:id', updategetStudio);
+studioRouter.patch('/studio/:id', updateStudio);
 
-StudioRouter.delete('/id', deletegetStudio);
+studioRouter.delete('/id', deleteStudio);
 
 
 
 // export router
-export default StudioRouter;
+export default studioRouter;

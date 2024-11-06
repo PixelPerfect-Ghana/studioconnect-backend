@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const studioSchema = Joi.object;
+export const studioSchema = Joi.object;
 export const addStudioValidator = Joi.object({
     title: Joi.string().required(),
     icon: Joi.string().required()
