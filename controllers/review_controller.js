@@ -48,14 +48,7 @@ export const updateReviewById = async (req, res, next) => {
         next(error);
     }
 };
-// export const updateReviewById =async (req, res, next) => {
-//     try {
-//      const allReview = await ReviewModel.findById(req.body);
-//      res.status(201).json(allReview);
-//     } catch (error) {
-//      next(error);
-//     }
-//  };
+
 
 export const deleteReviewById = async (req, res, next) => {
     try {

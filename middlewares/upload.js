@@ -5,7 +5,7 @@ import { multerSaveFilesOrg } from "multer-savefilesorg";
 export const studioIconUpload =  multer({
     storage: multerSaveFilesOrg({
     apiAccessToken: process.env.SAVEFILESORG_AOI_KEY,
-    // relativePath: 
+    relativePath: '/studio-api/vendor'
 }),
 preservePath: true
 });
@@ -13,7 +13,7 @@ preservePath: true
 export const userAvatarUpload =  multer({
     storage: multerSaveFilesOrg({
     apiAccessToken: process.env.SAVEFILESORG_AOI_KEY,
-    relativePath: '/todo-api/users/*',
+    relativePath: '/useravatar/users/*',
 }),
 preservePath: true
 });
