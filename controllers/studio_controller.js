@@ -5,7 +5,7 @@ import { addStudioValidator } from '../vallidator/studio_vallidator.js';
 
 
 
-export const addStudio = async (req, res, next) => {
+export const  addStudio = async (req, res, next) => {
   try {
     const { error, value } = addStudioValidator.validate({ ...req.body, icon: req.file?.filename });
     if (error) {
