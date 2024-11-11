@@ -17,6 +17,9 @@ const StudioSchema = new Schema({
     email: { type: String, required: true },
     website: String
   },
+
+  status: { type: String, enum: ['pending', 'approved', 'rejected'] },
+  
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   sessions: [
     {
