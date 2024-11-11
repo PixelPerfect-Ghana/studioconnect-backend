@@ -10,3 +10,4 @@ reviewRouter.get('/reviews/:id', getReviewById);
 reviewRouter.patch('/reviews/:id', updateReviewById);
 reviewRouter.delete('/reviews/:id', deleteReviewById);
 
+export default reviewRouter;

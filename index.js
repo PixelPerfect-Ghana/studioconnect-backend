@@ -21,7 +21,6 @@ app.use(express.json());
 app.use(studioRouter);
 app.use(userRouter);
 app.use(reviewRouter);
- 
 // listen for incoming requests
 app.listen(3000, () => {
     console.log('app is listening on port 3000');

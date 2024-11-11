@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { addStudio, deleteStudio, getStudios, updateStudio, getStudioById,} from "../controllers/studio_controller.js";
 
-import { studioIconUpload, userAvatarUpload } from "../middlewares/upload.js";
+import { studioIconUpload } from "../middlewares/upload.js";
 
 // create a router 
 const studioRouter = Router();
