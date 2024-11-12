@@ -5,9 +5,9 @@ import  { createBookings, deleteBooking, getAllBookings, updateBooking, getBooki
 
 const bookingRouter = Router();
 
-bookingRouter.get('/bookings', createBookings);
-bookingRouter.get.get('/bookings', getAllBookings);
-bookingRouter.get.patch('/bookings', updateBooking);
+bookingRouter.post('/bookings', createBookings);
+bookingRouter.get('/bookings', getAllBookings);
+bookingRouter.patch('/bookings', updateBooking);
 bookingRouter.delete('/booking', deleteBooking);
 studioRouter.get('/bookings/:id',getBookingById);
 
