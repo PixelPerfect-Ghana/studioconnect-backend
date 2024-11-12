@@ -5,14 +5,10 @@ import { createBookings, deleteBooking, getAllBookings, updateBooking, getBookin
 
 const bookingRouter = Router();
 
-
 bookingRouter.post('/bookings', createBookings);
 bookingRouter.get('/bookings', getAllBookings);
-
-
 bookingRouter.get('/bookings/:id', getBookingById);
 bookingRouter.patch('/bookings/:id', updateBooking);
-
 bookingRouter.delete('/bookings/:id', deleteBooking);
 
 export default bookingRouter;

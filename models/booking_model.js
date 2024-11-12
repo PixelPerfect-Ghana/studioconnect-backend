@@ -4,11 +4,14 @@ import { timeStamp } from "console";
 import mongoose, { Schema, model } from "mongoose";
 
 const bookingSchema = new Schema({
-    studoId: {
+
+    studioId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Studio',
         required: true
     },
+
+
     userId: {
         type: String,
         required: true
@@ -35,9 +38,9 @@ const bookingSchema = new Schema({
         enum: ['pending', 'confirmed', 'cancelled'],
         default: 'pending'
     },
-    
+
 });
-bookingSchema.index({name: 'text',title: 'text'});
+bookingSchema.index({ name: 'text', title: 'text' });
 
 // bookingSchema.plugin(toJSON);
 
