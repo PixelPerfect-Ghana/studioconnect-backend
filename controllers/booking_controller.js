@@ -6,28 +6,60 @@ import Booking from "../models/booking_model.js";
 const router = express.Router();
 
 // create booking
-export const createBookings = async (req, res, next) => {
+// export const createBookings = async (req, res, next) => {
+//   try {
+//     const studio = await
+//       studio.findById(req.body.studioId);
+//     if (!studio) return
+//     res.status(400).send('studio not found');
+
+//     const booking = newBooking(req.body);
+//     await booking.save();
+//     try {
+//       res.status(201).send(booking);
+
+
+
+//     } catch (error) {
+//       res.status(400).send(error);
+//     }
+//   } catch (error) {
+
+//   }
+// }
+
+export const createBookings = async (req, res) => {
   try {
-    const studio = await
-      studio.findById(req.body.studioId);
-    if (!studio) return
-    res.status(400).send('studio not found');
+    const { studioId, userId, bookingDate, startTime, endTime } = req.body;
 
-    const booking = newBooking(req.body);
-    await booking.save();
-    try {
-      res.status(201).send(booking);
-
-
-
-    } catch (error) {
-      res.status(400).send(error);
+    // Validate the incoming data
+    if (!studioId || !userId || !bookingDate || !startTime || !endTime) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
+
+    // Create a new booking
+    const newBooking = new Booking({
+      studioId,
+      userId,
+      bookingDate,
+      startTime,
+      endTime,
+      status: 'pending',  // Default status
+    });
+
+    // Save the booking to the database
+    await newBooking.save();
+
+    // Send a success response
+    res.status(201).json({
+      message: 'Booking created successfully',
+      booking: newBooking,
+    });
   } catch (error) {
-
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
-}
-
+};
 
 // Get All Bookings
 export const getAllBookings = async (req, res) => {
