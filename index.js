@@ -3,7 +3,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import studioRouter from './routes/studio_routes.js'
 import userRouter from './routes/user_routes.js';
-import { reviewRouter } from './routes/review_route.js';
+import reviewRouter from './routes/review_route.js';
+import bookingRouter from './routes/booking_route.js';
 
 
 
@@ -18,6 +19,7 @@ const app = express();
 app.use(express.json());
 
 // use routes
+app.use(bookingRouter);
 app.use(studioRouter);
 app.use(userRouter);
 app.use(reviewRouter);

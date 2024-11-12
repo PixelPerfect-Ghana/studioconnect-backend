@@ -31,14 +31,15 @@ const bookingSchema = new Schema({
 
     },
     status: {
-        required: String,
+        type: String,
         enum: ['pending', 'confirmed', 'cancelled'],
         default: 'pending'
-    }
+    },
+    
 });
 bookingSchema.index({name: 'text',title: 'text'});
 
-bookingSchema.plugin(toJSON);
+// bookingSchema.plugin(toJSON);
 
 // export const bookingModel = model('booking', bookingSchema)
 const Booking = mongoose.model('Booking', bookingSchema);

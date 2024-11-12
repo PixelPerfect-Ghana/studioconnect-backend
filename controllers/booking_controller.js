@@ -1,9 +1,12 @@
 
-import { bookingModel } from "../models/booking_model.js";
+import express from 'express';
+
+import Booking from "../models/booking_model.js";
+
 const router = express.Router();
 
-// add booking
-export const addBooking = async (req, res, next) => {
+// create booking
+export const createBookings = async (req, res, next) => {
   try {
     const studio = await
       studio.findById(req.body.studioId);
