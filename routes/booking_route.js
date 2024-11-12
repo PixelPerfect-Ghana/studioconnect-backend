@@ -1,14 +1,14 @@
 import { Router } from "express";
 const router = express.Router();
 
-import  { addBooking, deleteBooking, getAllBookings, updateBooking, getBookingById} from "../controllers/booking_contoller.js";
+import  { createBookings, deleteBooking, getAllBookings, updateBooking, getBookingById} from "../controllers/booking_contoller.js";
+
 const bookingRouter = Router();
 
-bookingRouter.get('/booking', getAllBookings);
-bookingRouter.get.get('/booking', addBooking);
-bookingRouter.get.patch('/booking', updateBooking);
+bookingRouter.get('/bookings', createBookings);
+bookingRouter.get.get('/bookings', getAllBookings);
+bookingRouter.get.patch('/bookings', updateBooking);
 bookingRouter.delete('/booking', deleteBooking);
-bookingRouter.get('/booking', getBookingById);
-
+studioRouter.get('/bookings/:id',getBookingById);
 
 export default bookingRouter;
