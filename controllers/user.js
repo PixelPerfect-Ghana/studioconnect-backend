@@ -1,4 +1,4 @@
-import { registerUserValidator,loginUserValidator,updateProfileValidator } from "../vallidator/user_validator";
+import { loginUserValidator, registerUserValidator,updateProfileValidator } from "../vallidator/user_validator.js";
 import User from "../models/user_models.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
@@ -20,18 +20,19 @@ export const registerUser = async (req, res, next) => {
         }
 
         // hash their password
+        console.log(value.password)
         const hashedPassword = bcrypt.hashSync(value.password, 10);
         // save user into database
-        await UserModel.create({
+        await User.create({
             ...value,
             password: hashedPassword
         });
 
         // send user confirmation email
-        await mailTransporter.sendMail({
-            to: value.email,
-            subject: 'user registration',
-        })
+        // await mailTransporter.sendMail({
+        //     to: value.email,
+        //     subject: 'user registration',
+        // })
         // respond to request
         res.json('user registered !');
     } catch (error) {
@@ -51,10 +52,12 @@ export const loginUser = async (req, res, next) => {
         if (!user) {
             return res.status(404).json('user does not exist');
         }
-
+console.log(user.password) 
+console.log(value.password)
         //compare their passwords
         const correctPassword = bcrypt.compareSync(value.password, user.password);
         if (!correctPassword) {
+            console.log(correctPassword)
             return res.status(401).json('invalid credentials');
         }
         //sign a token for the user
