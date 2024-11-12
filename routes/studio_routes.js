@@ -9,17 +9,17 @@ const studioRouter = Router();
 
 
 //define routes
-studioRouter.post('/studio', studioIconUpload.single('icon'), addStudio);
+studioRouter.post('/studios', studioIconUpload.single('icon'), addStudio);
 
-studioRouter.get('/studio', getStudios);
+studioRouter.get('/studios', getStudios);
 
-studioRouter.get('/studio/count');
+studioRouter.get('/studios/count');
 
-studioRouter.get('/studio/:id',getStudioById);
+studioRouter.get('/studios/:id',getStudioById);
 
-studioRouter.patch('/studio/:id', updateStudio);
+studioRouter.patch('/studios/:id', updateStudio);
 
-studioRouter.delete('/studio/:id', deleteStudio);
+studioRouter.delete('/studios/:id', deleteStudio);
 
 
 // export router
