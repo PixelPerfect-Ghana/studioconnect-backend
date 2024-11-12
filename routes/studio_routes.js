@@ -19,8 +19,7 @@ studioRouter.get('/studio/:id',getStudioById);
 
 studioRouter.patch('/studio/:id', updateStudio);
 
-studioRouter.delete('/id', deleteStudio);
-
+studioRouter.delete('/studio/:id', deleteStudio);
 
 
 // export router
