@@ -14,3 +14,18 @@ const reviewSchema = new Schema({
 
 
 export const ReviewModel = model('review', reviewSchema);
+
+
+// import mongoose from 'mongoose';
+
+// const reviewSchema = new mongoose.Schema({
+//   studioId: { type: mongoose.Schema.Types.ObjectId, ref: 'Studio', required: true },
+//   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+//   rating: { type: Number, required: true },
+//   comment: { type: String, required: true },
+//   createdAt: { type: Date, default: Date.now },
+// });
+
+// const Review = mongoose.model('Review', reviewSchema);
+
+// export default Review;

@@ -1,6 +1,6 @@
 import express from 'express';
 import { StudioModel } from "../models/studio_model.js";
-import { addStudioValidator } from '../vallidator/studio_vallidator.js';
+import { addStudioValidator } from '../validators/studio_vallidator.js';
 
 
 

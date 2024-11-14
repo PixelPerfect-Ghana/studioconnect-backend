@@ -1,10 +1,8 @@
 import { Router } from "express";
-
-import { getProfile, loginUser, logoutUser, registerUser, updateProfile, } from "../controllers/user.js";
-
+import { getProfile, loginUser, logoutUser, registerUser, updateProfile, } from "../controllers/user_controller.js";
+import { isAuthenticated, hasPermission } from "../middlewares/auth.js";
 import { userAvatarUpload } from "../middlewares/upload.js";
 
-import { isAuthenticated, hasPermission } from "../middlewares/auth.js";
 //create router
 const userRouter = Router();
 
@@ -27,3 +25,5 @@ userRouter.patch('/users/me', isAuthenticated, hasPermission('update_profile'),
 
 // export router
 export default userRouter;
+
+
