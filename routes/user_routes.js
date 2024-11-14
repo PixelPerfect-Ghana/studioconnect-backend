@@ -17,8 +17,7 @@ userRouter.post('/users/logout', isAuthenticated, logoutUser);
 
 userRouter.patch('/users/me', isAuthenticated, hasPermission('update_profile'),
 
-
-    userAvatarUpload.single('avatar'), updateProfile)
+ userAvatarUpload.single('avatar'), updateProfile)
 
 
 
