@@ -12,9 +12,9 @@ export const registerUser = async (req, res, next) => {
       }
   
       // Ensure the role is valid
-      const { role = "user" } = value;
-      if (!["user", "vendor"].includes(role)) {
-        return res.status(400).json({ message: "Invalid role" });
+      const user  = await UserModel.findOne({email: value.email});
+      if (user) {
+        return res.status(400).json({ message: "user exist" });
       }
   
       const hashedPassword = bcrypt.hashSync(value.password, 10);
