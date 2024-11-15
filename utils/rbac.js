@@ -15,8 +15,8 @@ export const permissions = [
             'update_profile',
             'add_studio',
             'update_studio',
-            'get_todo',
-            'delete_todo'
+            'get_studio',
+            'delete_studio'
 
 
         ]

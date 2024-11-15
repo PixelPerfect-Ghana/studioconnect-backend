@@ -10,7 +10,7 @@ const StudioSchema = new Schema({
   description: String,
   price: { type: Number, required: true },
   category: String,
-  location: String,
+  location: { type: String, required: true, trim: true },
   googleId: String,
   facebookId: String,
   contactInfo: {

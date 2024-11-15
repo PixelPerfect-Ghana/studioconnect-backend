@@ -61,7 +61,8 @@ export const loginUser = async (req, res, next) => {
         //respond to request
         res.json({
             message: 'user logged in!',
-            accessToken: token
+            accessToken: token,
+            role: user.role
         });
     } catch (error) {
         next(error);
