@@ -7,17 +7,16 @@ const StudioSchema = new Schema({
   title: { type: String, required: true },
   icon: { type: String, required: true },
   completed: { type: Boolean, default: false },
-  description: String,
+  description: { type: String, required: true, trim: true },
   price: { type: Number, required: true },
   category: String,
   location: { type: String, required: true, trim: true },
   googleId: String,
   facebookId: String,
-  contactInfo: {
     phone: { type: String, required: true },
     email: { type: String, required: true },
-    website: String
-  },
+    website: String,
+  
 
   status: { type: String, enum: ['pending', 'approved', 'rejected'] },
 
