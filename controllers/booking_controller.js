@@ -1,38 +1,20 @@
 
-
 import Booking from "../models/booking_model.js";
-
 
 export const createBookings = async (req, res) => {
   try {
-    const { studioId, userId, bookingDate, startTime, endTime } = req.body;
+    const { name, email, bookingDate, startTime, endTime } = req.body;
 
-    // Validate the incoming data
-    if (!studioId || !userId || !bookingDate || !startTime || !endTime) {
-      return res.status(400).json({ message: 'All fields are required' });
+    if (!name || !email || !bookingDate || !startTime || !endTime) {
+      return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Create a new booking
-    const newBooking = new Booking({
-      studioId,
-      userId,
-      bookingDate,
-      startTime,
-      endTime,
-      status: 'pending',  // Default status
-    });
+    const booking = new Booking({ name, email, bookingDate, startTime, endTime });
+    const savedBooking = await booking.save();
 
-    // Save the booking to the database
-    await newBooking.save();
-
-    // Send a success response
-    res.status(201).json({
-      message: 'Booking created successfully',
-      booking: newBooking,
-    });
+    res.status(201).json({ message: "Booking created successfully.", booking: savedBooking });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Failed to create booking.", error: error.message });
   }
 };
 

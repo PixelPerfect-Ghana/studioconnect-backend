@@ -8,6 +8,7 @@ const StudioSchema = new Schema({
   icon: { type: String, required: true },
   completed: { type: Boolean, default: false },
   description: String,
+  price: { type: Number, required: true },
   category: String,
   location: String,
   googleId: String,
@@ -19,7 +20,7 @@ const StudioSchema = new Schema({
   },
 
   status: { type: String, enum: ['pending', 'approved', 'rejected'] },
-  
+
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   sessions: [
     {
@@ -41,15 +42,12 @@ const StudioSchema = new Schema({
     amount: Number,
     balance: Number
   },
-  images: [
-    {
-      id: String,
-      session: { type: String, id: String },
-      type: String,
-      size: Number,
-      resolution: String
-    }
-  ]
+  images:
+  {
+    type: String,
+
+  }
+
 }, { timestamps: true });
 
 StudioSchema.index({ title: 'text', description: 'text', category: 'text', location: 'text' });

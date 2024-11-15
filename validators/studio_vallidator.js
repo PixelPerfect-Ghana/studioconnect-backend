@@ -3,6 +3,7 @@ import Joi from "joi";
 export const studioSchema = Joi.object;
 export const addStudioValidator = Joi.object({
     title: Joi.string().required(),
+    price: Joi.number().required(),
     icon: Joi.string().required()
 }).unknown()
 

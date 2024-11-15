@@ -4,19 +4,17 @@ export const permissions = [
         actions: [
             'get_profile',
             'update_profile',
-            'add_todo',
-            'update_todo',
-            'get_todo'
+            
         ]
     },
 
     {
-        role: 'admin',
+        role: 'vendor',
         actions: [
             'get_profile',
             'update_profile',
-            'add_todo',
-            'update_todo',
+            'add_studio',
+            'update_studio',
             'get_todo',
             'delete_todo'
 

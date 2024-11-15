@@ -4,41 +4,32 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 
 // import {mailTransporter} from "../utils/email.js";
-
 export const registerUser = async (req, res, next) => {
-
     try {
-        // validate user imput
-        const { error, value } = registerUserValidator.validate(req.body);
-        if (error) {
-            return res.status(422).json(error);
-        }
-        //check if user does not exist
-        const user = await UserModel.findOne({ email: value.email });
-        if (user) {
-            return res.status(409).json('user already exist');
-        }
-
-        // hash their password
-        console.log(value.password)
-        const hashedPassword = bcrypt.hashSync(value.password, 10);
-        // save user into database
-        await UserModel.create({
-            ...value,
-            password: hashedPassword
-        });
-
-        // send user confirmation email
-        // await mailTransporter.sendMail({
-        //     to: value.email,
-        //     subject: 'user registration',
-        // })
-        // respond to request
-        res.json('user registered !');
+      const { error, value } = registerUserValidator.validate(req.body);
+      if (error) {
+        return res.status(422).json({ message: error.details[0].message });
+      }
+  
+      // Ensure the role is valid
+      const { role = "user" } = value;
+      if (!["user", "vendor"].includes(role)) {
+        return res.status(400).json({ message: "Invalid role" });
+      }
+  
+      const hashedPassword = bcrypt.hashSync(value.password, 10);
+  
+      await UserModel.create({
+        ...value,
+        password: hashedPassword,
+      });
+  
+      res.status(201).json({ message: "User registered successfully!" });
     } catch (error) {
-        next(error);
+      next(error);
     }
-}
+  };
+  
 
 export const loginUser = async (req, res, next) => {
     try {
@@ -48,7 +39,7 @@ export const loginUser = async (req, res, next) => {
             return res.status(422).json(error);
         }
         // find one user with identifier
-        const user = await UserModel.findOne({ email: value.email });
+        const user = await UserModel.findOne({ email: value.email,role:value.role });
         if (!user) {
             return res.status(404).json('user does not exist');
         }
@@ -64,7 +55,7 @@ export const loginUser = async (req, res, next) => {
         const token = jwt.sign(
             { id: user.id },
             process.env.JWT_PRIVATE_KEY,
-            { expiresIn: '24h' }
+            { expiresIn: '48h' }
 
         );
         //respond to request
