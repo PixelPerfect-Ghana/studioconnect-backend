@@ -11,7 +11,7 @@ export const  addStudio = async (req, res, next) => {
     if (error) {
       return res.status(422).json({ error: error.details[0].message });
     }
-    await StudioModel.create(value);
+    await StudioModel.create({...value,user: req.auth.id});
     res.status(201).json({ message: 'Studio added!' });
   } catch (error) {
     console.error(error);
