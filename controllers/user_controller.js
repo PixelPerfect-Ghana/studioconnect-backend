@@ -12,9 +12,9 @@ export const registerUser = async (req, res, next) => {
       }
   
       // Ensure the role is valid
-      const user  = await UserModel.findOne({email: value.email});
-      if (user) {
-        return res.status(400).json({ message: "user exist" });
+      const { role = "user" } = value;
+      if (!["user", "vendor"].includes(role)) {
+        return res.status(400).json({ message: "Invalid role" });
       }
   
       const hashedPassword = bcrypt.hashSync(value.password, 10);
@@ -39,21 +39,19 @@ export const loginUser = async (req, res, next) => {
             return res.status(422).json(error);
         }
         // find one user with identifier
-        const user = await UserModel.findOne({ email: value.email,role:value.role });
+        const user = await UserModel.findOne({ email: value.email });
         if (!user) {
             return res.status(404).json('user does not exist');
         }
-        console.log(user.password)
-        console.log(value.password)
+        
         //compare their passwords
         const correctPassword = bcrypt.compareSync(value.password, user.password);
         if (!correctPassword) {
-            console.log(correctPassword)
             return res.status(401).json('invalid credentials');
         }
         //sign a token for the user
         const token = jwt.sign(
-            { id: user.id },
+            { id: user.id, role: user.role },
             process.env.JWT_PRIVATE_KEY,
             { expiresIn: '48h' }
 
@@ -80,7 +78,7 @@ export const getProfile = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
 
 
 
