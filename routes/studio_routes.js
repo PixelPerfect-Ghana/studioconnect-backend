@@ -38,8 +38,14 @@ const studioRouter = express.Router();
 
 
 studioRouter.post("/studios", isAuthenticated, hasPermission("add_studio"),studioIconUpload.single('icon') ,addStudio);
-studioRouter.get("/studios", getStudios); // Public access
-studioRouter.get("/studios/:id", getStudioById); // Public access
+
+// Public access
+studioRouter.get("/studios", getStudios);
+
+studioRouter.get("/studios/:id", getStudioById); 
+
 studioRouter.patch("/studios/:id", isAuthenticated, hasPermission("update_studio"), updateStudio);
+
 studioRouter.delete("/studios/:id", isAuthenticated, hasPermission("delete_studio"), deleteStudio);
+
 export default studioRouter;
