@@ -6,6 +6,7 @@ import {
   getStudios,
   updateStudio,
   getStudioById,
+  getUserStudio,
 } from "../controllers/studio_controller.js";
 
 import { isAuthenticated, hasPermission } from "../middlewares/auth.js";
@@ -18,6 +19,13 @@ studioRouter.post(
   hasPermission("add_studio"),
   studioIconUpload.single("icon"),
   addStudio
+);
+
+studioRouter.get(
+  "/studios/me",
+  isAuthenticated,
+  hasPermission("get_studio"),
+  getUserStudio
 );
 
 // Public access

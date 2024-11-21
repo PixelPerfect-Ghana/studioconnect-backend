@@ -75,6 +75,21 @@ export const getStudioById = async (req, res, next) => {
   }
 };
 
+export const getUserStudio = async (req, res, next) => {
+  try {
+    const studio = await StudioModel.find({ owner: req.auth.id }).populate(
+      "owner",
+      "firstName lastName email"
+    );
+    if (!studio) {
+      return res.status(404).json({ message: "Studio not found" });
+    }
+    res.status(200).json(studio);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateStudio = async (req, res, next) => {
   try {
     const studioId = req.params.id;

@@ -77,7 +77,7 @@ export const getProfile = async (req, res, next) => {
       return res.status(404).json({ message: "User does not exist!" });
     }
     // Respond to request
-    res.status(200).json({ user });
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }
