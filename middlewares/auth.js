@@ -21,7 +21,7 @@ export const hasPermission = (action) => {
       if (permission.actions.includes(action)) {
         next();
       } else {
-        res.status(403).json("Action not allowed !");
+        res.status(403).json({ message: "Action not allowed!" });
       }
     } catch (error) {
       next(error);

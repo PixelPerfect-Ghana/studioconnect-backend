@@ -1,134 +1,196 @@
+import { BookingModel } from "../models/booking_model.js";
+import { StudioModel } from "../models/studio_model.js";
+import {
+  createBookingValidator,
+  updateBookingValidator,
+  updateStatusValidator,
+} from "../validators/booking_validator.js";
 
-import Booking from "../models/booking_model.js";
-
-export const createBookings = async (req, res) => {
+export const createBooking = async (req, res) => {
   try {
-    const { name, email, bookingDate, startTime, endTime } = req.body;
-
-    if (!name || !email || !bookingDate || !startTime || !endTime) {
-      return res.status(400).json({ message: "All fields are required." });
+    const { error, value } = createBookingValidator.validate(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ errors: error.details.map((err) => err.message) });
     }
 
-    const booking = new Booking({ name, email, bookingDate, startTime, endTime });
-    const savedBooking = await booking.save();
+    const { studio: studioId } = value;
 
-    res.status(201).json({ message: "Booking created successfully.", booking: savedBooking });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to create booking.", error: error.message });
+    const studio = await StudioModel.findById(studioId);
+    if (!studio) {
+      return res.status(404).json({ message: "Studio not found" });
+    }
+
+    const newBooking = new BookingModel({
+      ...value,
+      user: req.auth.id,
+    });
+    await newBooking.save();
+
+    // Add the booking to the studio's bookings array
+    await StudioModel.findByIdAndUpdate(
+      value.studio,
+      { $push: { bookings: newBooking._id } },
+      { new: true }
+    );
+
+    res.status(201).json({
+      message: "Booking created successfully",
+      booking: newBooking,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error creating booking",
+      error: err.message,
+    });
   }
 };
 
-
-// Get All Bookings
-export const getAllBookings = async (req, res) => {
+export const updateBookingStatus = async (req, res) => {
   try {
-    const bookings = await Booking.find().populate('studioId'); // Use uppercase `Booking`
-    res.status(200).json(bookings);
+    const { error, value } = updateStatusValidator.validate(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ errors: error.details.map((err) => err.message) });
+    }
+
+    const { status } = value;
+    const { id } = req.params;
+
+    const updatedBooking = await BookingModel.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Booking status updated", booking: updatedBooking });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    res
+      .status(500)
+      .json({ message: "Error updating booking status", error: err.message });
+  }
+};
+
+// Get Bookings by User
+export const getUserBookings = async (req, res) => {
+  try {
+    const bookings = await BookingModel.find({ user: req.auth.id }).populate(
+      "studio",
+      "title email location icon"
+    );
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching bookings",
+      error: error.message,
+    });
+  }
+};
+
+// Get Studio Bookings
+export const getStudioBookings = async (req, res) => {
+  try {
+    const studioId = req.params.id;
+    const bookings = await BookingModel.find({ studio: studioId }).populate(
+      "user",
+      "firstName lastName email avatar"
+    );
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching bookings",
+      error: error.message,
+    });
   }
 };
 
 // Get Booking by ID
-export const getBookingById = async (req, res) => {
+export const getBookingById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const booking = await Booking.findById(id).populate('studioId');
-    if (!booking) return res.status(404).json({ message: 'Booking not found' });
+    const booking = await BookingModel.findById(id)
+      .populate("studio", "title email location icon")
+      .populate("user", "firstName lastName email avatar");
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
     res.status(200).json(booking);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    next();
   }
 };
 
-// Update Booking
-export const updateBooking = async (req, res) => {
+export const updateBookingDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
 
-    const updatedBooking = await Booking.findByIdAndUpdate(id, updates, { new: true });
-    if (!updatedBooking) return res.status(404).json({ message: 'Booking not found' });
+    const { error, value } = updateBookingValidator.validate(req.body, {
+      abortEarly: false,
+    });
+
+    if (error) {
+      return res.status(400).json({
+        message: "Validation error",
+        errors: error.details.map((err) => err.message),
+      });
+    }
+
+    const updatedBooking = await BookingModel.findByIdAndUpdate(
+      id,
+      { $set: value },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found." });
+    }
 
     res.status(200).json({
-      message: 'Booking updated successfully',
+      message: "Booking updated successfully.",
       booking: updatedBooking,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({
+      message: "Error updating booking details.",
+      error: error.message,
+    });
   }
 };
 
 // Delete Booking
-export const deleteBooking = async (req, res) => {
+export const deleteBooking = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const booking = await Booking.findByIdAndDelete(id); // Use `findByIdAndDelete` method
-    if (!booking) return res.status(404).json({ message: 'Booking not found' });
+
+    const booking = await BookingModel.findById(id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found." });
+    }
+
+    if (booking.status !== "cancelled") {
+      return res.status(400).json({
+        message: "Booking can only be deleted if the status is 'cancelled'.",
+      });
+    }
+
+    await booking.deleteOne();
 
     res.status(200).json({
-      message: 'Booking cancelled successfully',
-      booking,
+      message: "Booking deleted successfully!",
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({
+      message: "An error occurred while deleting the booking.",
+      error: err.message,
+    });
   }
 };
-
-
-
-
-// // Get All Bookings
-// export const getAllBookings = async (req, res) => {
-//   try {
-//     const bookings = await booking.find().populate('studioId');
-//     res.send(bookings);
-//   } catch (err) {
-//     res.status(500).send(err);
-//   }
-// };
-
-
-// // Get Booking by ID
-// export const getBookingById = async (req, res) => {
-//   try {
-//     const booking = await booking.findById(id).populate('studioId');
-//     if (!booking) return res.status(404).send();
-//     res.send(booking);
-//   } catch (err) {
-//     res.status(500).send(err);
-//   }
-// };
-
-
-
-// // update booking
-// export const updateBooking = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const Studio = await StudioModel.findByIdAndUpdate(id);
-//     res.json('Studio updated');
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-
-
-// // Cancel Booking
-// export const deleteBooking = async (req, res) => {
-//   try {
-//     const booking = await Booking.findByIdDelete(id);
-//     if (!booking) return res.status(404).send();
-//     booking.status = 'cancelled';
-//     await booking.save();
-//     res.send(booking);
-//   } catch (err) {
-//     res.status(400).send(err);
-//   }
-// };
-
